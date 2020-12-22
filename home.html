@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>tsdb-test</title>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-analytics.js"></script>
+
+    </head>
+    <body>
+        <!-- <h1>Hello</h1> -->
+        <div id="app">
+            {{ device1.temp }}
+        </div>
+        
+        <script>
+            var config = {
+                apiKey: 'AIzaSyBf7lydFnMf8rOa3Ep_Xu7aPZ21dVzYTM4',
+                authDomain: 'temperature-sensor-c10f0.firebaseapp.com',
+                databaseURL: 'https://temperature-sensor-c10f0-default-rtdb.firebaseio.com'
+            };
+            firebase.initializeApp(config);
+
+            var db = firebase.database();
+            var devices;
+            // for (let i = 1; i <= 3; i++) {
+            //     var deviceId = `dummy-temp-${i}`;
+            //     var ref = db.ref('device/' + deviceId);
+            //     ref.on({
+            //         temperature: message.temperature,
+            //         humidity: message.humidity,
+            //         timestamp: message.timestamp,
+            //     });
+            // }
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    device1: {
+                        temp: "",
+                        humid: "",
+                        timestamp: ""
+                    },
+                    device2: {
+                        temp: "",
+                        humid: "",
+                        timestamp: ""
+                    },
+                    device3: {
+                        temp: "",
+                        humid: "",
+                        timestamp: ""
+                    },
+                },
+            mounted() {
+                db.ref('device').on('value', function(snapshot) {
+                    let arr = [];
+                    snapshot.forEach(function (childSnapshot) {
+                        arr.push(childSnapshot.val());
+                        
+                    });
+                    console.log(arr);
+                });
+            }
+        })
+        </script>
+    </body>
+</html>
